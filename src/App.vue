@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import checkboxGroup from "./components/checkbox-group.vue";
+import { useAppStore } from './store';
+import { computed } from 'vue';
+
 
 const object = [
   { id: 1, label: "string" },
@@ -7,11 +10,18 @@ const object = [
   { id: 2, label: "tut" },
 ];
 
+
+const appStore = useAppStore();
+
+const selected = computed(() => appStore.getSelected);
+
 </script>
 
 <template>
   <div>
-    <checkbox-group :chekboxObject="object" :value="true"/>
+    <checkbox-group :chekboxObject="object" />
+
+    {{ selected }}
   </div>
 </template>
 

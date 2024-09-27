@@ -1,50 +1,56 @@
 <template>
-  <div role="group">
-    <div v-for="checkbox in props.chekboxObject" :key="checkbox.id">
-      <checkbox
-        :label="checkbox.label"
-        :checked="isCheckboxChecked(checkbox.id)"
-        @update:checked="updateCheckedArr(checkbox.id, $event)"
-      />
+    <div role="group">
+      <div v-for="checkbox in props.chekboxObject" :key="checkbox.id">
+        <checkbox
+          :label="checkbox.label"
+          :checked="isCheckboxChecked(checkbox)"
+          @update:checked="updateCheckedArr(checkbox.id, $event)"
+        />
+      </div>
     </div>
-    {{ checkedArr }}
-  </div>
-</template>
-
-<script setup lang="ts">
-import checkbox from "./checkbox.vue";
-import { reactive } from "vue";
-
-export interface CheckboxType {
-  id: number;
-  label: string;
-}
-
-export interface Props {
-  value?: string | boolean;
-  chekboxObject: Array<CheckboxType>;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  value: false,
-});
-
-let checkedArr = reactive<number[]>([]);
-
-const isCheckboxChecked = (id: number): boolean => {
-  return props.value === checkedArr.includes(id);
-};
-
-function updateCheckedArr(id: number, checked: boolean) {
-  if (checked) {
-    checkedArr.push(id);
-
-    return;
+  </template>
+  
+  <script setup lang="ts">
+  import checkbox from "./checkbox.vue";
+  import { ref } from "vue";
+  import { useAppStore } from '../store';
+  
+  export interface CheckboxType {
+    id: number;
+    label: string;
+    value?: boolean;
   }
-  const index = checkedArr.indexOf(id);
-  if (index > -1) {
-    checkedArr.splice(index, 1);
+  
+  export interface Props {
+    value?: string | boolean;
+    chekboxObject: Array<CheckboxType>;
   }
-}
-</script>
-./checkbox.vue
+  
+  const props = withDefaults(defineProps<Props>(), {
+    chekboxObject: [],
+  });
+  
+  const appStore = useAppStore();
+  
+  const checkedArr = ref<number[]>([]);
+  
+  const isCheckboxChecked = (checkbox: CheckboxType): boolean => {
+    return checkedArr.value.includes(checkbox.id);
+  };
+  
+  function updateCheckedArr(id: number, checked: boolean) {
+    if (checked) {
+      if (!checkedArr.value.includes(id)) {
+        checkedArr.value.push(id);
+      }
+    } else {
+      const index = checkedArr.value.indexOf(id);
+      if (index > -1) {
+        checkedArr.value.splice(index, 1);
+      }
+    }
+  
+    appStore.setSelected([...checkedArr.value]);
+  }
+  </script>
+  
