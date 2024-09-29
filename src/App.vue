@@ -16,13 +16,25 @@ const name = computed(() => appStore.getName);
 watch(model, (val) => {
   appStore.setName(val);
 });
-
 </script>
 
 <template>
-  <div>
-    <checkbox-group :chekboxObject="object" />
-    <input v-model="model" />
-    {{ selected }}{{ name }}
+  <div class="app">
+    <h3>Components</h3>
+    <div class="app__components">
+      <checkbox-group :chekboxObject="object" /> <input v-model="model" />
+    </div>
+    <h3>Store</h3>
+    <div>Seleted: {{ selected }}</div>
+    <div>Name: {{ name }}</div>
   </div>
 </template>
+
+<style>
+.app {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  align-items: center;
+}
+</style>

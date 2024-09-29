@@ -1,5 +1,5 @@
 <template>
-  <div role="group">
+  <div class="checkbox-group" role="group">
     <div v-for="checkbox in props.chekboxObject" :key="checkbox.id">
       <checkbox
         :label="checkbox.label"
@@ -28,21 +28,21 @@ const props = withDefaults(defineProps<Props>(), {
 
 const appStore = useAppStore();
 
-const checkedIdArr = ref<number[]>([]);
+const checkedIdArr = ref<string[]>([]);
 
 const isCheckboxChecked = (checkbox: CheckboxType): boolean => {
-  return checkedIdArr.value.includes(checkbox.id);
+  return checkedIdArr.value.includes(checkbox.value);
 };
 
 function updateCheckedIdArr(
-  select: string | boolean,
+  value: string | boolean,
   checked: boolean,
 ) {
 
   if (checked) {
-      checkedIdArr.value.push(select);
+      checkedIdArr.value.push(value);
   } else {
-    const index = checkedIdArr.value.indexOf(select);
+    const index = checkedIdArr.value.indexOf(value);
     if (index > -1) {
       checkedIdArr.value.splice(index, 1);
     }
@@ -51,3 +51,11 @@ function updateCheckedIdArr(
   appStore.setSelected([...checkedIdArr.value]);
 }
 </script>
+
+<style>
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+</style>
