@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 export const useAppStore = defineStore('app', {
-    state: () => ({ name: 'Иван', selected: [] as number[], }),
+    state: () => ({ name: '', selected: [] as number[], }),
     getters: {
       getName: (state) => state.name,
       getSelected: (state) => state.selected,
@@ -9,6 +9,9 @@ export const useAppStore = defineStore('app', {
     actions: {
       setSelected(arr: number[]) {
         this.selected = arr;
+      },
+      setName(val: string) {
+        this.name = val;
       },
     },
 })
