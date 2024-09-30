@@ -5,7 +5,7 @@
         :label="checkbox.label"
         :checked="isCheckboxChecked(checkbox)"
         @update:checked="
-          updateCheckedIdArr(checkbox.value || true, $event)
+          updateCheckedArr(checkbox.value || true, $event)
         "
       />
     </div>
@@ -16,7 +16,7 @@
 import checkbox from "./checkbox.vue";
 import { ref } from "vue";
 import { useAppStore } from "../store";
-import { CheckboxType } from "./types/checkboxTypes";
+import { CheckboxType, ValueCheckboxType } from "../types/checkboxTypes";
 
 export interface Props {
   chekboxObject: Array<CheckboxType> | null;
@@ -28,27 +28,27 @@ const props = withDefaults(defineProps<Props>(), {
 
 const appStore = useAppStore();
 
-const checkedIdArr = ref<string[]>([]);
+const checkedArr = ref<ValueCheckboxType[]>([]);
 
 const isCheckboxChecked = (checkbox: CheckboxType): boolean => {
-  return checkedIdArr.value.includes(checkbox.value);
+  return checkedArr.value.includes(checkbox.value);
 };
 
-function updateCheckedIdArr(
+function updateCheckedArr(
   value: string | boolean,
   checked: boolean,
 ) {
 
   if (checked) {
-      checkedIdArr.value.push(value);
+      checkedArr.value.push(value);
   } else {
-    const index = checkedIdArr.value.indexOf(value);
+    const index = checkedArr.value.indexOf(value);
     if (index > -1) {
-      checkedIdArr.value.splice(index, 1);
+      checkedArr.value.splice(index, 1);
     }
   }
 
-  appStore.setSelected([...checkedIdArr.value]);
+  appStore.setSelected([...checkedArr.value]);
 }
 </script>
 
@@ -58,4 +58,4 @@ function updateCheckedIdArr(
     flex-direction: column;
     align-items: start;
 }
-</style>
+</style>../types/checkboxTypes
